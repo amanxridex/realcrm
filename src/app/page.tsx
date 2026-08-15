@@ -250,13 +250,7 @@ export default function Home() {
 
   return (
     <>
-      {/* Top Navigation Tabs */}
-      <div className="top-tabs">
-        <button className="tab-item active">Buy</button>
-        <button className="tab-item">Sell</button>
-        <button className="tab-item">Rent</button>
-        <button className="tab-item">Compare</button>
-      </div>
+      {/* Top Navigation Tabs Removed */}
 
       <div className="page-header">
         <div style={{ display: 'flex', alignItems: 'baseline' }}>
