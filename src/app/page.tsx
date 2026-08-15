@@ -14,6 +14,16 @@ export default function Home() {
     return ["All Locations", ...Array.from(new Set(locs))].sort();
   }, []);
 
+  // Generate size options from 100 to 3000 in increments of 100
+  const sizeOptions = useMemo(() => {
+    const opts = ["All Sizes"];
+    for (let i = 100; i < 3000; i += 100) {
+      opts.push(`${i} - ${i + 100} sqft`);
+    }
+    opts.push("Over 3000 sqft");
+    return opts;
+  }, []);
+
   const filteredProperties = useMemo(() => {
     return PROPERTIES.filter(property => {
       // Location Filter
@@ -23,9 +33,16 @@ export default function Home() {
       
       // Size Filter
       if (sizeFilter !== "All Sizes") {
-        if (sizeFilter === "Under 1500 sqft" && property.sqft >= 1500) return false;
-        if (sizeFilter === "1500 - 2500 sqft" && (property.sqft < 1500 || property.sqft > 2500)) return false;
-        if (sizeFilter === "Over 2500 sqft" && property.sqft <= 2500) return false;
+        if (sizeFilter === "Over 3000 sqft") {
+          if (property.sqft <= 3000) return false;
+        } else {
+          const match = sizeFilter.match(/^(\d+) - (\d+) sqft$/);
+          if (match) {
+            const min = parseInt(match[1]);
+            const max = parseInt(match[2]);
+            if (property.sqft < min || property.sqft > max) return false;
+          }
+        }
       }
       
       return true;
@@ -63,12 +80,11 @@ export default function Home() {
             <select 
               value={sizeFilter} 
               onChange={(e) => setSizeFilter(e.target.value)}
-              style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", minWidth: "200px" }}
+              style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", minWidth: "200px", maxHeight: "200px" }}
             >
-              <option value="All Sizes">All Sizes</option>
-              <option value="Under 1500 sqft">Under 1500 sqft</option>
-              <option value="1500 - 2500 sqft">1500 - 2500 sqft</option>
-              <option value="Over 2500 sqft">Over 2500 sqft</option>
+              {sizeOptions.map(opt => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
             </select>
           </div>
         </div>
