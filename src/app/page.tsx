@@ -341,7 +341,12 @@ export default function Home() {
           {filteredProperties.length > 0 ? (
             filteredProperties.map((property) => (
               <div className="property-card" key={property.id}>
-                <img src={property.image} alt={property.title} className="property-image" />
+                <div style={{ position: "relative" }}>
+                  <img src={property.image} alt={property.title} className="property-image" />
+                  <span style={{ position: "absolute", top: "1rem", right: "1rem", background: "rgba(0, 0, 0, 0.7)", color: "white", padding: "0.3rem 0.8rem", borderRadius: "20px", fontSize: "0.75rem", fontWeight: 600, backdropFilter: "blur(4px)" }}>
+                    For {(property as any).purpose || "Sell"}
+                  </span>
+                </div>
                 <div className="property-content">
                   <div className="property-title">{property.title}</div>
                   <div className="property-price">{property.price}</div>
