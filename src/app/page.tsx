@@ -1,69 +1,126 @@
 import Image from "next/image";
+import styles from "./page.module.css";
+
+const PROPERTIES = [
+  {
+    id: 1,
+    title: "Modern Luxury Villa",
+    location: "Beverly Hills, CA",
+    price: "$5,400,000",
+    beds: 5,
+    baths: 6,
+    sqft: 4500,
+    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    title: "Downtown Penthouse",
+    location: "New York, NY",
+    price: "$2,850,000",
+    beds: 3,
+    baths: 3,
+    sqft: 2200,
+    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 3,
+    title: "Suburban Family Home",
+    location: "Austin, TX",
+    price: "$850,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2800,
+    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    title: "Beachfront Condo",
+    location: "Miami, FL",
+    price: "$1,200,000",
+    beds: 2,
+    baths: 2,
+    sqft: 1500,
+    image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 5,
+    title: "Mountain Retreat",
+    location: "Aspen, CO",
+    price: "$3,100,000",
+    beds: 4,
+    baths: 4,
+    sqft: 3500,
+    image: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 6,
+    title: "Lakefront Cabin",
+    location: "Lake Tahoe, NV",
+    price: "$1,750,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1800,
+    image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+  }
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <>
+      <section className={styles.hero}>
+        <h1 className={styles.heroTitle}>Find Your Dream Home</h1>
+        <p className={styles.heroSubtitle}>
+          Discover the perfect property that fits your lifestyle. Browse through thousands of curated listings.
+        </p>
+        <div className={styles.searchContainer}>
+          <input 
+            type="text" 
+            className={styles.searchInput} 
+            placeholder="Search by city, neighborhood, or zip code..."
+          />
+          <button className={styles.searchButton}>Search</button>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <div className="container">
+        <h2 className={styles.sectionTitle}>Featured Properties</h2>
+        <div className={styles.propertiesGrid}>
+          {PROPERTIES.map((property) => (
+            <div key={property.id} className={styles.propertyCard}>
+              <div className={styles.propertyImageContainer}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={property.image} 
+                  alt={property.title}
+                  className={styles.propertyImage}
+                />
+                <div className={styles.priceTag}>{property.price}</div>
+              </div>
+              <div className={styles.propertyContent}>
+                <h3 className={styles.propertyTitle}>{property.title}</h3>
+                <div className={styles.propertyLocation}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  {property.location}
+                </div>
+                <div className={styles.propertyFeatures}>
+                  <span className={styles.feature}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    {property.beds} Beds
+                  </span>
+                  <span className={styles.feature}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="M4 12V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path></svg>
+                    {property.baths} Baths
+                  </span>
+                  <span className={styles.feature}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    {property.sqft} sqft
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </main>
-    </div>
+      </div>
+    </>
   );
 }
