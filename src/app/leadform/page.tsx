@@ -21,7 +21,9 @@ export default function LeadFormPage() {
       name: formData.name,
       email: formData.email || "N/A",
       phone: formData.phone,
-      interest: `${formData.type} in ${formData.preferredLocation} (Budget: ${formData.budget})`,
+      location: formData.preferredLocation,
+      type: formData.type,
+      budget: formData.budget,
       status: "Hot" // Default status for new leads
     };
 
@@ -33,9 +35,9 @@ export default function LeadFormPage() {
       } else {
         // Fallback default dummy leads if local storage is empty
         leadsArray = [
-          { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", interest: "Premium Villa in Ahmedabad", status: "Hot" },
-          { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", interest: "Downtown Penthouse", status: "Warm" },
-          { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", interest: "Suburban Family Home", status: "Cold" }
+          { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", location: "Ahmedabad", type: "Premium Villa", budget: "₹2 Cr - ₹3 Cr", status: "Hot" },
+          { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", location: "Surat", type: "Penthouse", budget: "₹1.5 Cr", status: "Warm" },
+          { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", location: "Vadodara", type: "Individual Home", budget: "Under ₹1 Cr", status: "Cold" }
         ];
       }
       

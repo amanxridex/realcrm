@@ -16,25 +16,36 @@ export default function LeadsPage() {
     } else {
       // Default leads if empty
       const defaultLeads = [
-        { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", interest: "Premium Villa in Ahmedabad", status: "Hot" },
-        { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", interest: "Downtown Penthouse", status: "Warm" },
-        { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", interest: "Suburban Family Home", status: "Cold" },
-        { id: 4, name: "Neha Joshi", email: "neha.j@example.com", phone: "+91 65432 10987", interest: "Beachfront Condo", status: "Hot" },
-        { id: 5, name: "Vikram Singh", email: "vikram.s@example.com", phone: "+91 54321 09876", interest: "Mountain Retreat", status: "Warm" }
+        { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", location: "Ahmedabad", type: "Premium Villa", budget: "₹2 Cr - ₹3 Cr", status: "Hot" },
+        { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", location: "Surat", type: "Penthouse", budget: "₹1.5 Cr", status: "Warm" },
+        { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", location: "Vadodara", type: "Individual Home", budget: "Under ₹1 Cr", status: "Cold" },
+        { id: 4, name: "Neha Joshi", email: "neha.j@example.com", phone: "+91 65432 10987", location: "Rajkot", type: "Apartment", budget: "₹50 Lacs", status: "Hot" },
+        { id: 5, name: "Vikram Singh", email: "vikram.s@example.com", phone: "+91 54321 09876", location: "Gandhinagar", type: "Flat", budget: "₹75 Lacs", status: "Warm" }
       ];
       setLeads(defaultLeads);
       localStorage.setItem("crm_leads", JSON.stringify(defaultLeads));
     }
   }, []);
 
+  // Function to clear localStorage just in case of old schema conflicts
+  const handleClearCache = () => {
+    localStorage.removeItem("crm_leads");
+    window.location.reload();
+  };
+
   return (
     <div className="card">
       <div className="card-header">
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600 }}>Recent Leads</h2>
-        <button className="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          Add Lead
-        </button>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <button className="btn-primary" onClick={handleClearCache} style={{ backgroundColor: "var(--danger)", borderColor: "var(--danger)" }}>
+            Clear Data
+          </button>
+          <button className="btn-primary" onClick={() => window.location.href='/leadform'}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Lead
+          </button>
+        </div>
       </div>
       
       <div className="table-wrapper">
@@ -43,7 +54,9 @@ export default function LeadsPage() {
             <tr>
               <th>Name</th>
               <th>Contact Info</th>
-              <th>Property Interest</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th>Budget</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -53,10 +66,14 @@ export default function LeadsPage() {
               <tr key={lead.id}>
                 <td style={{ fontWeight: 500, color: "var(--foreground)" }}>{lead.name}</td>
                 <td>
-                  <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>{lead.email}</div>
-                  <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>{lead.phone}</div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <span style={{ fontSize: "0.85rem", color: "var(--foreground)" }}>{lead.phone}</span>
+                    <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>{lead.email}</span>
+                  </div>
                 </td>
-                <td>{lead.interest}</td>
+                <td>{lead.location}</td>
+                <td>{lead.type}</td>
+                <td style={{ fontWeight: 600 }}>{lead.budget}</td>
                 <td>
                   <span className={`status-badge ${lead.status === 'Hot' ? 'sold' : ''}`} style={lead.status === 'Cold' ? { backgroundColor: '#f1f5f9', color: '#475569' } : {}}>
                     {lead.status}
