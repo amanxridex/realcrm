@@ -31,6 +31,7 @@ export default function Home() {
   const [sizeFilter, setSizeFilter] = useState("All Sizes");
   const [typeFilter, setTypeFilter] = useState("All Types");
   const [purposeFilter, setPurposeFilter] = useState("All Purposes");
+  const [priceFilter, setPriceFilter] = useState("All Prices");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
@@ -110,26 +111,54 @@ export default function Home() {
       }
 
       // Price Filter
-      let numericPrice = 0;
-      if (property.price.includes("Cr")) {
-        numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
-      } else if (property.price.includes("Lacs")) {
-        numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
-      } else {
-        // Fallback for custom entries
-        numericPrice = parseFloat(property.price.replace(/[^0-9.]/g, ""));
+      if (priceFilter !== "All Prices") {
+        let numericPrice = 0;
+        if (property.price.includes("Cr")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
+        } else if (property.price.includes("Lacs")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
+        } else {
+          numericPrice = parseFloat(property.price.replace(/[^0-9.]/g, ""));
+        }
+
+        if (priceFilter === "Under ₹1 Cr") {
+          if (numericPrice >= 10000000) return false;
+        } else if (priceFilter === "₹1 Cr - ₹3 Cr") {
+          if (numericPrice < 10000000 || numericPrice > 30000000) return false;
+        } else if (priceFilter === "₹3 Cr - ₹5 Cr") {
+          if (numericPrice < 30000000 || numericPrice > 50000000) return false;
+        } else if (priceFilter === "Over ₹5 Cr") {
+          if (numericPrice <= 50000000) return false;
+        }
       }
 
       if (minPrice && !isNaN(Number(minPrice))) {
+        // Fallback numeric price calculation if priceFilter isn't used
+        let numericPrice = 0;
+        if (property.price.includes("Cr")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
+        } else if (property.price.includes("Lacs")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
+        } else {
+          numericPrice = parseFloat(property.price.replace(/[^0-9.]/g, ""));
+        }
         if (numericPrice < Number(minPrice)) return false;
       }
       if (maxPrice && !isNaN(Number(maxPrice))) {
+        let numericPrice = 0;
+        if (property.price.includes("Cr")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
+        } else if (property.price.includes("Lacs")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
+        } else {
+          numericPrice = parseFloat(property.price.replace(/[^0-9.]/g, ""));
+        }
         if (numericPrice > Number(maxPrice)) return false;
       }
       
       return true;
     });
-  }, [propertiesList, locationFilter, sizeFilter, typeFilter, minPrice, maxPrice]);
+  }, [propertiesList, locationFilter, sizeFilter, typeFilter, purposeFilter, priceFilter, minPrice, maxPrice]);
 
   const handleSaveProperty = (e: React.FormEvent) => {
     e.preventDefault();
@@ -299,8 +328,9 @@ export default function Home() {
         </div>
         
         <div className="filter-pill">
-          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>Price</span>
-          <span style={{ color: "var(--primary-color)", fontWeight: "700" }}>$$</span>
+          <select value={priceFilter} onChange={(e) => setPriceFilter(e.target.value)}>
+            {priceOptions.map(opt => <option key={opt} value={opt} style={{color: '#000'}}>{opt}</option>)}
+          </select>
         </div>
 
         <div className="filter-pill active">
