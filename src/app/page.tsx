@@ -31,7 +31,6 @@ export default function Home() {
   const [sizeFilter, setSizeFilter] = useState("All Sizes");
   const [typeFilter, setTypeFilter] = useState("All Types");
   const [purposeFilter, setPurposeFilter] = useState("All Purposes");
-  const [priceFilter, setPriceFilter] = useState("All Prices");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
@@ -76,7 +75,6 @@ export default function Home() {
     return opts;
   }, []);
 
-  const priceOptions = ["All Prices", "Under ₹1 Cr", "₹1 Cr - ₹3 Cr", "₹3 Cr - ₹5 Cr", "Over ₹5 Cr"];
 
   const filteredProperties = useMemo(() => {
     return propertiesList.filter(property => {
@@ -110,27 +108,7 @@ export default function Home() {
         }
       }
 
-      // Price Filter
-      if (priceFilter !== "All Prices") {
-        let numericPrice = 0;
-        if (property.price.includes("Cr")) {
-          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
-        } else if (property.price.includes("Lacs")) {
-          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
-        } else {
-          numericPrice = parseFloat(property.price.replace(/[^0-9.]/g, ""));
-        }
 
-        if (priceFilter === "Under ₹1 Cr") {
-          if (numericPrice >= 10000000) return false;
-        } else if (priceFilter === "₹1 Cr - ₹3 Cr") {
-          if (numericPrice < 10000000 || numericPrice > 30000000) return false;
-        } else if (priceFilter === "₹3 Cr - ₹5 Cr") {
-          if (numericPrice < 30000000 || numericPrice > 50000000) return false;
-        } else if (priceFilter === "Over ₹5 Cr") {
-          if (numericPrice <= 50000000) return false;
-        }
-      }
 
       if (minPrice && !isNaN(Number(minPrice))) {
         // Fallback numeric price calculation if priceFilter isn't used
@@ -158,7 +136,7 @@ export default function Home() {
       
       return true;
     });
-  }, [propertiesList, locationFilter, sizeFilter, typeFilter, purposeFilter, priceFilter, minPrice, maxPrice]);
+  }, [propertiesList, locationFilter, sizeFilter, typeFilter, purposeFilter, minPrice, maxPrice]);
 
   const handleSaveProperty = (e: React.FormEvent) => {
     e.preventDefault();
@@ -327,10 +305,11 @@ export default function Home() {
           <input type="text" placeholder="Search Here...." style={{ width: '120px' }} />
         </div>
         
-        <div className="filter-pill">
-          <select value={priceFilter} onChange={(e) => setPriceFilter(e.target.value)}>
-            {priceOptions.map(opt => <option key={opt} value={opt} style={{color: '#000'}}>{opt}</option>)}
-          </select>
+        <div className="filter-pill" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem", fontWeight: 600 }}>₹</span>
+          <input type="number" placeholder="Min" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} style={{ width: '70px', border: 'none', outline: 'none', background: 'transparent', color: 'var(--foreground)' }} />
+          <span style={{ color: "var(--text-muted)" }}>-</span>
+          <input type="number" placeholder="Max" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} style={{ width: '70px', border: 'none', outline: 'none', background: 'transparent', color: 'var(--foreground)' }} />
         </div>
 
         <div className="filter-pill active">
