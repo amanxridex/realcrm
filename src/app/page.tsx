@@ -59,35 +59,6 @@ export default function Home() {
             Add Property
           </button>
         </div>
-        
-        {/* Filters Bar */}
-        <div style={{ display: "flex", gap: "1rem", width: "100%", padding: "0.5rem 0", borderTop: "1px solid var(--border)", paddingTop: "1rem" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-            <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase" }}>Location</label>
-            <select 
-              value={locationFilter} 
-              onChange={(e) => setLocationFilter(e.target.value)}
-              style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", minWidth: "200px" }}
-            >
-              {locations.map(loc => (
-                <option key={loc} value={loc}>{loc}</option>
-              ))}
-            </select>
-          </div>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-            <label style={{ fontSize: "0.8rem", fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase" }}>Land Size</label>
-            <select 
-              value={sizeFilter} 
-              onChange={(e) => setSizeFilter(e.target.value)}
-              style={{ padding: "0.5rem", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", minWidth: "200px", maxHeight: "200px" }}
-            >
-              {sizeOptions.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-          </div>
-        </div>
       </div>
       
       <div className="table-wrapper">
@@ -95,10 +66,36 @@ export default function Home() {
           <thead>
             <tr>
               <th>Property Details</th>
-              <th>Location</th>
+              <th>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <span>Location</span>
+                  <select 
+                    value={locationFilter} 
+                    onChange={(e) => setLocationFilter(e.target.value)}
+                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "150px" }}
+                  >
+                    {locations.map(loc => (
+                      <option key={loc} value={loc}>{loc}</option>
+                    ))}
+                  </select>
+                </div>
+              </th>
               <th>Type</th>
               <th>Price</th>
-              <th>Size</th>
+              <th>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <span>Size</span>
+                  <select 
+                    value={sizeFilter} 
+                    onChange={(e) => setSizeFilter(e.target.value)}
+                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "150px" }}
+                  >
+                    {sizeOptions.map(opt => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                  </select>
+                </div>
+              </th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
