@@ -24,7 +24,7 @@ export default function LeadFormPage() {
       location: formData.preferredLocation,
       type: formData.type,
       budget: formData.budget,
-      status: "Hot" // Default status for new leads
+      status: "NA" // Default status for new leads
     };
 
     try {

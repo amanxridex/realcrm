@@ -28,6 +28,14 @@ export default function LeadsPage() {
   }, []);
 
   // Function to clear localStorage just in case of old schema conflicts
+  const handleStatusChange = (id: number, newStatus: string) => {
+    const updatedLeads = leads.map(lead => 
+      lead.id === id ? { ...lead, status: newStatus } : lead
+    );
+    setLeads(updatedLeads);
+    localStorage.setItem("crm_leads", JSON.stringify(updatedLeads));
+  };
+
   const handleClearCache = () => {
     localStorage.removeItem("crm_leads");
     window.location.reload();
@@ -75,9 +83,27 @@ export default function LeadsPage() {
                 <td>{lead.type}</td>
                 <td style={{ fontWeight: 600 }}>{lead.budget}</td>
                 <td>
-                  <span className={`status-badge ${lead.status === 'Hot' ? 'sold' : ''}`} style={lead.status === 'Cold' ? { backgroundColor: '#f1f5f9', color: '#475569' } : {}}>
-                    {lead.status}
-                  </span>
+                  <select 
+                    value={lead.status}
+                    onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                    className={`status-badge ${lead.status === 'Hot' ? 'sold' : ''}`}
+                    style={{ 
+                      ...(lead.status === 'Cold' ? { backgroundColor: '#f1f5f9', color: '#475569' } : {}),
+                      ...(lead.status === 'Warm' ? { backgroundColor: '#fef08a', color: '#854d0e' } : {}),
+                      ...(lead.status === 'NA' ? { backgroundColor: '#e2e8f0', color: '#64748b' } : {}),
+                      border: "none",
+                      outline: "none",
+                      cursor: "pointer",
+                      appearance: "none",
+                      paddingRight: "8px",
+                      textAlign: "center"
+                    }}
+                  >
+                    <option value="NA">NA</option>
+                    <option value="Cold">Cold</option>
+                    <option value="Warm">Warm</option>
+                    <option value="Hot">Hot</option>
+                  </select>
                 </td>
                 <td>
                   <div style={{ display: "flex", gap: "8px" }}>
