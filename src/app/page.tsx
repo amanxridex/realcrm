@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { PROPERTIES } from "@/data/properties";
 
 export default function Home() {
+export default function Home() {
   const [propertiesList, setPropertiesList] = useState(PROPERTIES);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Load from localStorage if available
   useEffect(() => {
@@ -152,15 +154,100 @@ export default function Home() {
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (!text) return;
+
+      const lines = text.split('\n');
+      if (lines.length < 2) return; // Need at least header and one row
+
+      // Parse headers
+      const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
+      
+      const newProperties = [];
+      let currentMaxId = propertiesList.length > 0 ? Math.max(...propertiesList.map(p => p.id)) : 0;
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        // Simple CSV parse (doesn't handle commas inside quotes perfectly, but good enough for simple use cases)
+        const values = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''));
+        
+        const prop: any = {
+          id: ++currentMaxId,
+          beds: 0,
+          baths: 0,
+          image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+          description: "Uploaded via CSV",
+          agent: "Admin Agent",
+          agentPhone: "+91 00000 00000"
+        };
+
+        headers.forEach((header, index) => {
+          if (values[index] === undefined) return;
+          
+          if (header.includes('property') || header.includes('detail')) {
+            prop.title = values[index];
+          } else if (header.includes('location')) {
+            prop.location = values[index];
+          } else if (header.includes('type')) {
+            prop.type = values[index];
+          } else if (header.includes('price')) {
+            prop.price = values[index];
+          } else if (header.includes('size')) {
+            prop.sqft = parseInt(values[index].replace(/[^0-9]/g, '')) || 0;
+          } else if (header.includes('status')) {
+            prop.status = values[index];
+          }
+        });
+
+        if (prop.title && prop.price) {
+          newProperties.push(prop);
+        }
+      }
+
+      if (newProperties.length > 0) {
+        setPropertiesList(prev => [...newProperties, ...prev]);
+        alert(`Successfully imported ${newProperties.length} properties!`);
+      }
+      
+      // Reset input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    };
+    
+    reader.readAsText(file);
+  };
+
   return (
     <div className="card" style={{ position: "relative" }}>
       <div className="card-header" style={{ flexDirection: "column", alignItems: "flex-start", gap: "1rem" }}>
         <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
           <h2 style={{ fontSize: "1.2rem", fontWeight: 700, letterSpacing: "-0.025em" }}>All Properties</h2>
-          <button className="btn-primary" onClick={() => setShowAddModal(true)}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Add Property
-          </button>
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <input 
+              type="file" 
+              accept=".csv" 
+              style={{ display: "none" }} 
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+            />
+            <button className="btn-primary" style={{ background: "rgba(255, 255, 255, 0.1)", border: "1px solid var(--border)", boxShadow: "none" }} onClick={() => fileInputRef.current?.click()}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              Upload CSV
+            </button>
+            <button className="btn-primary" onClick={() => setShowAddModal(true)}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Add Property
+            </button>
+          </div>
         </div>
       </div>
       
