@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import styles from "./page.module.css";
 
 const PROPERTIES = [
   {
@@ -11,7 +9,8 @@ const PROPERTIES = [
     beds: 5,
     baths: 6,
     sqft: 4500,
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    type: "Villa",
+    status: "Active"
   },
   {
     id: 2,
@@ -21,7 +20,8 @@ const PROPERTIES = [
     beds: 3,
     baths: 3,
     sqft: 2200,
-    image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    type: "Apartment",
+    status: "Pending"
   },
   {
     id: 3,
@@ -31,7 +31,8 @@ const PROPERTIES = [
     beds: 4,
     baths: 3,
     sqft: 2800,
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    type: "House",
+    status: "Active"
   },
   {
     id: 4,
@@ -41,7 +42,8 @@ const PROPERTIES = [
     beds: 2,
     baths: 2,
     sqft: 1500,
-    image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    type: "Condo",
+    status: "Sold"
   },
   {
     id: 5,
@@ -51,7 +53,8 @@ const PROPERTIES = [
     beds: 4,
     baths: 4,
     sqft: 3500,
-    image: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    type: "House",
+    status: "Active"
   },
   {
     id: 6,
@@ -61,72 +64,70 @@ const PROPERTIES = [
     beds: 3,
     baths: 2,
     sqft: 1800,
-    image: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    type: "Cabin",
+    status: "Active"
   }
 ];
 
 export default function Home() {
   return (
-    <>
-      <section className={styles.hero}>
-        <h1 className={styles.heroTitle}>Find Your Dream Home</h1>
-        <p className={styles.heroSubtitle}>
-          Discover the perfect property that fits your lifestyle. Browse through thousands of curated listings.
-        </p>
-        <div className={styles.searchContainer}>
-          <input 
-            type="text" 
-            className={styles.searchInput} 
-            placeholder="Search by city, neighborhood, or zip code..."
-          />
-          <button className={styles.searchButton}>Search</button>
-        </div>
-      </section>
-
-      <div className="container">
-        <h2 className={styles.sectionTitle}>Featured Properties</h2>
-        <div className={styles.propertiesGrid}>
-          {PROPERTIES.map((property) => (
-            <Link href={`/properties/${property.id}`} key={property.id} className={styles.propertyCard}>
-              <div className={styles.propertyImageContainer}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={property.image} 
-                  alt={property.title}
-                  className={styles.propertyImage}
-                />
-                <div className={styles.priceTag}>{property.price}</div>
-              </div>
-              <div className={styles.propertyContent}>
-                <h3 className={styles.propertyTitle}>{property.title}</h3>
-                <div className={styles.propertyLocation}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  {property.location}
-                </div>
-                <div className={styles.propertyFeatures}>
-                  <span className={styles.feature}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                    {property.beds} Beds
-                  </span>
-                  <span className={styles.feature}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12h20"></path><path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"></path><path d="M4 12V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path></svg>
-                    {property.baths} Baths
-                  </span>
-                  <span className={styles.feature}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                    {property.sqft} sqft
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-        <div style={{ textAlign: "center", marginTop: "2rem", marginBottom: "4rem" }}>
-          <Link href="/properties" className={styles.searchButton} style={{ textDecoration: "none", display: "inline-block" }}>
-            View All Properties
-          </Link>
-        </div>
+    <div className="card">
+      <div className="card-header">
+        <h2 style={{ fontSize: "1.1rem", fontWeight: 600 }}>All Properties</h2>
+        <button className="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Property
+        </button>
       </div>
-    </>
+      
+      <div className="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Property Details</th>
+              <th>Location</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Size</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PROPERTIES.map((property) => (
+              <tr key={property.id}>
+                <td style={{ fontWeight: 500, color: "var(--foreground)" }}>
+                  {property.title}
+                </td>
+                <td style={{ color: "var(--text-muted)" }}>{property.location}</td>
+                <td>{property.type}</td>
+                <td style={{ fontWeight: 600 }}>{property.price}</td>
+                <td style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                  {property.beds}bd • {property.baths}ba • {property.sqft} sqft
+                </td>
+                <td>
+                  <span className={`status-badge ${property.status.toLowerCase() === 'sold' ? 'sold' : ''}`}>
+                    {property.status}
+                  </span>
+                </td>
+                <td>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </Link>
+                    <button className="btn-icon" title="Edit">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
+                    <button className="btn-icon" title="Delete" style={{ color: "var(--danger)" }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
