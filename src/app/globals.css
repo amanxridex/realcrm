@@ -354,3 +354,57 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .top-tabs { gap: 1rem; overflow-x: auto; white-space: nowrap; }
 }
 
+/* Table Styles for List View */
+.table-wrapper {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  box-shadow: var(--shadow-md);
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background: var(--background);
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  font-size: 0.85rem;
+  border-bottom: 2px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+tbody tr {
+  transition: var(--transition-smooth);
+}
+
+tbody tr:hover {
+  background: var(--primary-light);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+td .status-badge {
+  position: static;
+  display: inline-block;
+  box-shadow: none;
+  border: 1px solid var(--border);
+  background-color: var(--background);
+}
