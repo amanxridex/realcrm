@@ -348,10 +348,55 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* Mobile Overrides */
+.mobile-bottom-nav { display: none; }
+
 @media (max-width: 768px) {
   .sidebar { display: none; }
-  .main-wrapper { padding: 1.5rem; }
+  .main-wrapper { padding: 1rem; padding-bottom: 5rem; }
   .top-tabs { gap: 1rem; overflow-x: auto; white-space: nowrap; }
+  
+  .upload-csv-btn { display: none !important; }
+  
+  /* Filter Mobile Layout */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .filter-pill { 
+    flex: 1 1 calc(50% - 0.5rem); 
+    padding: 0.5rem; 
+    font-size: 0.85rem; 
+    min-width: 120px;
+    justify-content: center;
+  }
+  
+  /* Bottom Navbar Mobile */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--surface);
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+    border-top: 1px solid var(--border);
+    justify-content: space-around;
+    padding: 0.75rem 0 1.2rem;
+    z-index: 1000;
+  }
+  .mobile-nav-item {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 0.7rem; font-weight: 500; gap: 4px; text-decoration: none;
+  }
+  .mobile-nav-item svg { width: 22px; height: 22px; }
+  .mobile-nav-item.active, .mobile-nav-item:active { color: var(--primary-color); }
+
+  /* Compact Table View for Mobile */
+  .table-wrapper { border-radius: 8px; margin-top: 0.5rem; }
+  th { padding: 0.6rem 0.4rem; font-size: 0.7rem; letter-spacing: 0; white-space: nowrap; }
+  td { padding: 0.6rem 0.4rem; font-size: 0.75rem; white-space: normal; word-break: break-word; }
+  td .btn-icon { width: 28px; height: 28px; padding: 4px; }
+  td .btn-icon svg { width: 14px; height: 14px; }
+  .status-badge { padding: 0.2rem 0.4rem; font-size: 0.65rem; }
 }
 
 /* Table Styles for List View */
