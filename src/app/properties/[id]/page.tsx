@@ -14,7 +14,7 @@ export default async function PropertyDetails({
     return (
       <div className="container" style={{ padding: "4rem 0", textAlign: "center" }}>
         <h1>Property Not Found</h1>
-        <Link href="/properties" className={homeStyles.searchButton} style={{ marginTop: "2rem", display: "inline-block", textDecoration: "none" }}>Back to Listings</Link>
+        <Link href="/" className="btn-primary" style={{ marginTop: "2rem", display: "inline-block", textDecoration: "none" }}>Back to Dashboard</Link>
       </div>
     );
   }
