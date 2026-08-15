@@ -7,11 +7,19 @@ import { PROPERTIES } from "@/data/properties";
 export default function Home() {
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [sizeFilter, setSizeFilter] = useState("All Sizes");
+  const [typeFilter, setTypeFilter] = useState("All Types");
+  const [priceFilter, setPriceFilter] = useState("All Prices");
 
   // Extract unique locations from the data
   const locations = useMemo(() => {
     const locs = PROPERTIES.map(p => p.location);
     return ["All Locations", ...Array.from(new Set(locs))].sort();
+  }, []);
+
+  // Extract unique types from the data
+  const types = useMemo(() => {
+    const ts = PROPERTIES.map(p => p.type);
+    return ["All Types", ...Array.from(new Set(ts))].sort();
   }, []);
 
   // Generate size options from 100 to 3000 in increments of 100
@@ -24,10 +32,17 @@ export default function Home() {
     return opts;
   }, []);
 
+  const priceOptions = ["All Prices", "Under ₹1 Cr", "₹1 Cr - ₹3 Cr", "₹3 Cr - ₹5 Cr", "Over ₹5 Cr"];
+
   const filteredProperties = useMemo(() => {
     return PROPERTIES.filter(property => {
       // Location Filter
       if (locationFilter !== "All Locations" && property.location !== locationFilter) {
+        return false;
+      }
+
+      // Type Filter
+      if (typeFilter !== "All Types" && property.type !== typeFilter) {
         return false;
       }
       
@@ -44,10 +59,25 @@ export default function Home() {
           }
         }
       }
+
+      // Price Filter
+      if (priceFilter !== "All Prices") {
+        let numericPrice = 0;
+        if (property.price.includes("Cr")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
+        } else if (property.price.includes("Lacs")) {
+          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
+        }
+
+        if (priceFilter === "Under ₹1 Cr" && numericPrice >= 10000000) return false;
+        if (priceFilter === "₹1 Cr - ₹3 Cr" && (numericPrice < 10000000 || numericPrice > 30000000)) return false;
+        if (priceFilter === "₹3 Cr - ₹5 Cr" && (numericPrice < 30000000 || numericPrice > 50000000)) return false;
+        if (priceFilter === "Over ₹5 Cr" && numericPrice <= 50000000) return false;
+      }
       
       return true;
     });
-  }, [locationFilter, sizeFilter]);
+  }, [locationFilter, sizeFilter, typeFilter, priceFilter]);
 
   return (
     <div className="card">
@@ -80,8 +110,34 @@ export default function Home() {
                   </select>
                 </div>
               </th>
-              <th>Type</th>
-              <th>Price</th>
+              <th>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <span>Type</span>
+                  <select 
+                    value={typeFilter} 
+                    onChange={(e) => setTypeFilter(e.target.value)}
+                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "120px" }}
+                  >
+                    {types.map(t => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+              </th>
+              <th>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <span>Price</span>
+                  <select 
+                    value={priceFilter} 
+                    onChange={(e) => setPriceFilter(e.target.value)}
+                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "120px" }}
+                  >
+                    {priceOptions.map(p => (
+                      <option key={p} value={p}>{p}</option>
+                    ))}
+                  </select>
+                </div>
+              </th>
               <th>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   <span>Size</span>
