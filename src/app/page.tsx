@@ -30,6 +30,7 @@ export default function Home() {
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [sizeFilter, setSizeFilter] = useState("All Sizes");
   const [typeFilter, setTypeFilter] = useState("All Types");
+  const [purposeFilter, setPurposeFilter] = useState("All Purposes");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
 
@@ -39,6 +40,7 @@ export default function Home() {
     title: "",
     location: "",
     type: "Residential",
+    purpose: "Sell",
     price: "",
     sqft: 0,
     beds: 0,
@@ -83,6 +85,12 @@ export default function Home() {
 
       // Type Filter
       if (typeFilter !== "All Types" && property.type !== typeFilter) {
+        return false;
+      }
+      
+      // Purpose Filter
+      const propPurpose = (property as any).purpose || "Sell";
+      if (purposeFilter !== "All Purposes" && propPurpose !== purposeFilter) {
         return false;
       }
       
@@ -135,6 +143,7 @@ export default function Home() {
       title: "",
       location: "",
       type: "Residential",
+      purpose: "Sell",
       price: "",
       sqft: 0,
       beds: 0,
@@ -198,6 +207,8 @@ export default function Home() {
             prop.location = values[index];
           } else if (header.includes('type')) {
             prop.type = values[index];
+          } else if (header.includes('purpose')) {
+            prop.purpose = values[index];
           } else if (header.includes('price')) {
             prop.price = values[index];
           } else if (header.includes('size')) {
@@ -298,6 +309,14 @@ export default function Home() {
             {types.map(t => <option key={t} value={t} style={{color: '#000'}}>{t}</option>)}
           </select>
         </div>
+
+        <div className="filter-pill">
+          <select value={purposeFilter} onChange={(e) => setPurposeFilter(e.target.value)}>
+            <option value="All Purposes" style={{color: '#000'}}>All Purposes</option>
+            <option value="Sell" style={{color: '#000'}}>Sell</option>
+            <option value="Rent" style={{color: '#000'}}>Rent</option>
+          </select>
+        </div>
         
         <div className="filter-pill">
           <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)}>
@@ -344,6 +363,7 @@ export default function Home() {
                 <th>Property Details</th>
                 <th>Location</th>
                 <th>Type</th>
+                <th>Purpose</th>
                 <th>Price (₹)</th>
                 <th>Size</th>
                 <th>Status</th>
@@ -359,6 +379,7 @@ export default function Home() {
                     </td>
                     <td data-label="Location" style={{ color: "var(--text-muted)" }}>{property.location}</td>
                     <td data-label="Type">{property.type}</td>
+                    <td data-label="Purpose">{(property as any).purpose || "Sell"}</td>
                     <td data-label="Price" style={{ fontWeight: 700, color: "var(--primary-color)" }}>{property.price}</td>
                     <td data-label="Size" style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
                       {property.beds}bd • {property.baths}ba • {property.sqft} sqft
@@ -410,7 +431,7 @@ export default function Home() {
                 <input required value={newPropertyForm.image} onChange={(e) => setNewPropertyForm({...newPropertyForm, image: e.target.value})} style={{ padding: "0.75rem", borderRadius: "6px", border: "1px solid var(--border)" }} placeholder="https://example.com/image.jpg" />
               </div>
               
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1rem" }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                   <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Location</label>
                   <input required value={newPropertyForm.location} onChange={(e) => setNewPropertyForm({...newPropertyForm, location: e.target.value})} style={{ padding: "0.75rem", borderRadius: "6px", border: "1px solid var(--border)" }} placeholder="Ahmedabad" />
@@ -421,6 +442,13 @@ export default function Home() {
                     <option value="Residential">Residential</option>
                     <option value="Commercial">Commercial</option>
                     <option value="Plot">Plot</option>
+                  </select>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Purpose</label>
+                  <select value={(newPropertyForm as any).purpose} onChange={(e) => setNewPropertyForm({...newPropertyForm, purpose: e.target.value})} style={{ padding: "0.75rem", borderRadius: "6px", border: "1px solid var(--border)" }}>
+                    <option value="Sell">Sell</option>
+                    <option value="Rent">Rent</option>
                   </select>
                 </div>
               </div>
