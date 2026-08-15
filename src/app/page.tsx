@@ -168,7 +168,7 @@ export default function Home() {
       // Parse headers
       const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
       
-      const newProperties = [];
+      const newProperties: any[] = [];
       let currentMaxId = propertiesList.length > 0 ? Math.max(...propertiesList.map(p => p.id)) : 0;
 
       for (let i = 1; i < lines.length; i++) {
