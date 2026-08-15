@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Real CRM - Dashboard",
+  title: "Gandhinagarhomes",
   description: "Professional Real Estate CRM Dashboard",
 };
 
@@ -25,7 +25,7 @@ export default function RootLayout({
           {/* Desktop Sidebar */}
           <aside className="sidebar">
             <div className="sidebar-header">
-              Real CRM
+              Gandhinagarhomes
             </div>
             <nav className="nav-links">
               <Link href="/dashboard" className="nav-item">
@@ -49,7 +49,7 @@ export default function RootLayout({
           
           <div className="main-wrapper">
             <header className="top-header">
-              <div className="header-title">Real CRM</div>
+              <div className="header-title">Gandhinagarhomes</div>
               <div className="user-profile">
                 <div className="avatar">A</div>
                 <span className="user-name">Aman</span>
