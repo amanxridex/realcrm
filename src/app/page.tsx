@@ -41,7 +41,10 @@ export default function Home() {
     beds: 0,
     baths: 0,
     status: "Active",
-    image: ""
+    image: "",
+    description: "A great property in prime location.",
+    agent: "Admin Agent",
+    agentPhone: "+91 00000 00000"
   });
 
   // Extract unique locations from the data
@@ -65,6 +68,8 @@ export default function Home() {
     opts.push("Over 3000 sqft");
     return opts;
   }, []);
+
+  const priceOptions = ["All Prices", "Under ₹1 Cr", "₹1 Cr - ₹3 Cr", "₹3 Cr - ₹5 Cr", "Over ₹5 Cr"];
 
   const filteredProperties = useMemo(() => {
     return propertiesList.filter(property => {
@@ -132,7 +137,10 @@ export default function Home() {
       beds: 0,
       baths: 0,
       status: "Active",
-      image: ""
+      image: "",
+      description: "A great property in prime location.",
+      agent: "Admin Agent",
+      agentPhone: "+91 00000 00000"
     });
   };
 
