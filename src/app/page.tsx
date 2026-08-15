@@ -46,6 +46,7 @@ export default function Home() {
     beds: 0,
     baths: 0,
     status: "Active",
+    availability: "1",
     image: "",
     description: "A great property in prime location.",
     agent: "Admin Agent",
@@ -149,6 +150,7 @@ export default function Home() {
       beds: 0,
       baths: 0,
       status: "Active",
+      availability: "1",
       image: "",
       description: "A great property in prime location.",
       agent: "Admin Agent",
@@ -347,6 +349,9 @@ export default function Home() {
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                     {property.location}
                   </div>
+                  <div style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginTop: "0.25rem" }}>
+                    Availability: <span style={{ fontWeight: 600 }}>{(property as any).availability || "1"}</span>
+                  </div>
                   <div style={{ display: 'flex', gap: '8px', marginTop: '1rem', justifyContent: 'flex-end' }}>
                     <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", border: "none", background: "none" }} onClick={() => setPropertyToDelete(property.id)}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
@@ -376,6 +381,7 @@ export default function Home() {
                 <th>Price (₹)</th>
                 <th>Size</th>
                 <th>Status</th>
+                <th>Availability</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -397,6 +403,9 @@ export default function Home() {
                       <span className={`status-badge ${property.status.toLowerCase() === 'sold' ? 'sold' : ''}`}>
                         {property.status}
                       </span>
+                    </td>
+                    <td data-label="Availability" style={{ fontWeight: 600 }}>
+                      {(property as any).availability || "1"}
                     </td>
                     <td data-label="Actions">
                       <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
@@ -484,12 +493,18 @@ export default function Home() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1rem" }}>
-                <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Status</label>
-                <select value={newPropertyForm.status} onChange={(e) => setNewPropertyForm({...newPropertyForm, status: e.target.value})} style={{ padding: "0.75rem", borderRadius: "6px", border: "1px solid var(--border)" }}>
-                  <option value="Active">Active</option>
-                  <option value="Sold">Sold</option>
-                </select>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1rem" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Status</label>
+                  <select value={newPropertyForm.status} onChange={(e) => setNewPropertyForm({...newPropertyForm, status: e.target.value})} style={{ padding: "0.75rem", borderRadius: "6px", border: "1px solid var(--border)" }}>
+                    <option value="Active">Active</option>
+                    <option value="Sold">Sold</option>
+                  </select>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <label style={{ fontSize: "0.85rem", fontWeight: 600 }}>Availability</label>
+                  <input value={(newPropertyForm as any).availability} onChange={(e) => setNewPropertyForm({...newPropertyForm, availability: e.target.value})} style={{ padding: "0.75rem", borderRadius: "6px", border: "1px solid var(--border)" }} placeholder="E.g., 1, 2, Few left" />
+                </div>
               </div>
 
               <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1rem" }}>
