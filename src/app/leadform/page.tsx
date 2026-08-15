@@ -14,7 +14,39 @@ export default function LeadFormPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Lead for ${formData.name} submitted successfully!`);
+    
+    // Save to localStorage
+    const newLead = {
+      id: Date.now(),
+      name: formData.name,
+      email: formData.email || "N/A",
+      phone: formData.phone,
+      interest: `${formData.type} in ${formData.preferredLocation} (Budget: ${formData.budget})`,
+      status: "Hot" // Default status for new leads
+    };
+
+    try {
+      const existing = localStorage.getItem("crm_leads");
+      let leadsArray = [];
+      if (existing) {
+        leadsArray = JSON.parse(existing);
+      } else {
+        // Fallback default dummy leads if local storage is empty
+        leadsArray = [
+          { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", interest: "Premium Villa in Ahmedabad", status: "Hot" },
+          { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", interest: "Downtown Penthouse", status: "Warm" },
+          { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", interest: "Suburban Family Home", status: "Cold" }
+        ];
+      }
+      
+      leadsArray.unshift(newLead); // Add new lead to the beginning
+      localStorage.setItem("crm_leads", JSON.stringify(leadsArray));
+      
+      alert(`Lead for ${formData.name} submitted successfully!`);
+    } catch (err) {
+      alert("Error saving lead!");
+    }
+
     // Reset form after submission
     setFormData({
       name: "",

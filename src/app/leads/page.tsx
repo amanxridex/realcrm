@@ -1,11 +1,31 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
 export default function LeadsPage() {
-  const LEADS = [
-    { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", interest: "Premium Villa in Ahmedabad", status: "Hot" },
-    { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", interest: "Downtown Penthouse", status: "Warm" },
-    { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", interest: "Suburban Family Home", status: "Cold" },
-    { id: 4, name: "Neha Joshi", email: "neha.j@example.com", phone: "+91 65432 10987", interest: "Beachfront Condo", status: "Hot" },
-    { id: 5, name: "Vikram Singh", email: "vikram.s@example.com", phone: "+91 54321 09876", interest: "Mountain Retreat", status: "Warm" }
-  ];
+  const [leads, setLeads] = useState<any[]>([]);
+
+  useEffect(() => {
+    const existing = localStorage.getItem("crm_leads");
+    if (existing) {
+      try {
+        setLeads(JSON.parse(existing));
+      } catch (e) {
+        console.error("Error parsing leads");
+      }
+    } else {
+      // Default leads if empty
+      const defaultLeads = [
+        { id: 1, name: "Rahul Sharma", email: "rahul.s@example.com", phone: "+91 98765 43210", interest: "Premium Villa in Ahmedabad", status: "Hot" },
+        { id: 2, name: "Priya Desai", email: "priya.d@example.com", phone: "+91 87654 32109", interest: "Downtown Penthouse", status: "Warm" },
+        { id: 3, name: "Amit Patel", email: "amit.p@example.com", phone: "+91 76543 21098", interest: "Suburban Family Home", status: "Cold" },
+        { id: 4, name: "Neha Joshi", email: "neha.j@example.com", phone: "+91 65432 10987", interest: "Beachfront Condo", status: "Hot" },
+        { id: 5, name: "Vikram Singh", email: "vikram.s@example.com", phone: "+91 54321 09876", interest: "Mountain Retreat", status: "Warm" }
+      ];
+      setLeads(defaultLeads);
+      localStorage.setItem("crm_leads", JSON.stringify(defaultLeads));
+    }
+  }, []);
 
   return (
     <div className="card">
@@ -29,7 +49,7 @@ export default function LeadsPage() {
             </tr>
           </thead>
           <tbody>
-            {LEADS.map((lead) => (
+            {leads.map((lead) => (
               <tr key={lead.id}>
                 <td style={{ fontWeight: 500, color: "var(--foreground)" }}>{lead.name}</td>
                 <td>
