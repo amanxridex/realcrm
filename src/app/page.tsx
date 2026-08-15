@@ -26,6 +26,7 @@ export default function Home() {
     }
   }, [propertiesList]);
 
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [sizeFilter, setSizeFilter] = useState("All Sizes");
   const [typeFilter, setTypeFilter] = useState("All Types");
@@ -241,6 +242,22 @@ export default function Home() {
           <span className="results-location">in {locationFilter}</span>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: '6px', overflow: 'hidden' }}>
+            <button 
+              onClick={() => setViewMode("grid")}
+              style={{ padding: "0.5rem", background: viewMode === "grid" ? "var(--primary-color)" : "transparent", color: viewMode === "grid" ? "#fff" : "var(--text-muted)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              title="Grid View"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            </button>
+            <button 
+              onClick={() => setViewMode("list")}
+              style={{ padding: "0.5rem", background: viewMode === "list" ? "var(--primary-color)" : "transparent", color: viewMode === "list" ? "#fff" : "var(--text-muted)", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}
+              title="List View"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+            </button>
+          </div>
           <input 
             type="file" 
             accept=".csv" 
@@ -289,35 +306,94 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="property-grid">
-        {filteredProperties.length > 0 ? (
-          filteredProperties.map((property) => (
-            <div className="property-card" key={property.id}>
-              <img src={property.image} alt={property.title} className="property-image" />
-              <div className="property-content">
-                <div className="property-title">{property.title}</div>
-                <div className="property-price">{property.price}</div>
-                <div className="property-location">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                  {property.location}
-                </div>
-                <div style={{ display: 'flex', gap: '8px', marginTop: '1rem', justifyContent: 'flex-end' }}>
-                  <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", border: "none", background: "none" }} onClick={() => setPropertyToDelete(property.id)}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                  </button>
-                  <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </Link>
+      {viewMode === "grid" ? (
+        <div className="property-grid">
+          {filteredProperties.length > 0 ? (
+            filteredProperties.map((property) => (
+              <div className="property-card" key={property.id}>
+                <img src={property.image} alt={property.title} className="property-image" />
+                <div className="property-content">
+                  <div className="property-title">{property.title}</div>
+                  <div className="property-price">{property.price}</div>
+                  <div className="property-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    {property.location}
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '1rem', justifyContent: 'flex-end' }}>
+                    <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", border: "none", background: "none" }} onClick={() => setPropertyToDelete(property.id)}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                    <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
+                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </Link>
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+              No properties found matching your filters.
             </div>
-          ))
-        ) : (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-            No properties found matching your filters.
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Property Details</th>
+                <th>Location</th>
+                <th>Type</th>
+                <th>Price (₹)</th>
+                <th>Size</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProperties.length > 0 ? (
+                filteredProperties.map((property) => (
+                  <tr key={property.id}>
+                    <td data-label="Property" style={{ fontWeight: 600, color: "var(--foreground)" }}>
+                      {property.title}
+                    </td>
+                    <td data-label="Location" style={{ color: "var(--text-muted)" }}>{property.location}</td>
+                    <td data-label="Type">{property.type}</td>
+                    <td data-label="Price" style={{ fontWeight: 700, color: "var(--primary-color)" }}>{property.price}</td>
+                    <td data-label="Size" style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                      {property.beds}bd • {property.baths}ba • {property.sqft} sqft
+                    </td>
+                    <td data-label="Status">
+                      <span className={`status-badge ${property.status.toLowerCase() === 'sold' ? 'sold' : ''}`}>
+                        {property.status}
+                      </span>
+                    </td>
+                    <td data-label="Actions">
+                      <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                        <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </Link>
+                        <button className="btn-icon" title="Edit">
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        </button>
+                        <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", background: "none", border: "none", cursor: "pointer" }} onClick={() => setPropertyToDelete(property.id)}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
+                    No properties found matching your filters.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {showAddModal && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
