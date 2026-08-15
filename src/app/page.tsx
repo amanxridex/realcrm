@@ -8,7 +8,8 @@ export default function Home() {
   const [locationFilter, setLocationFilter] = useState("All Locations");
   const [sizeFilter, setSizeFilter] = useState("All Sizes");
   const [typeFilter, setTypeFilter] = useState("All Types");
-  const [priceFilter, setPriceFilter] = useState("All Prices");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   // Extract unique locations from the data
   const locations = useMemo(() => {
@@ -31,8 +32,6 @@ export default function Home() {
     opts.push("Over 3000 sqft");
     return opts;
   }, []);
-
-  const priceOptions = ["All Prices", "Under ₹1 Cr", "₹1 Cr - ₹3 Cr", "₹3 Cr - ₹5 Cr", "Over ₹5 Cr"];
 
   const filteredProperties = useMemo(() => {
     return PROPERTIES.filter(property => {
@@ -61,23 +60,23 @@ export default function Home() {
       }
 
       // Price Filter
-      if (priceFilter !== "All Prices") {
-        let numericPrice = 0;
-        if (property.price.includes("Cr")) {
-          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
-        } else if (property.price.includes("Lacs")) {
-          numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
-        }
+      let numericPrice = 0;
+      if (property.price.includes("Cr")) {
+        numericPrice = parseFloat(property.price.replace("₹", "").replace(" Cr", "")) * 10000000;
+      } else if (property.price.includes("Lacs")) {
+        numericPrice = parseFloat(property.price.replace("₹", "").replace(" Lacs", "")) * 100000;
+      }
 
-        if (priceFilter === "Under ₹1 Cr" && numericPrice >= 10000000) return false;
-        if (priceFilter === "₹1 Cr - ₹3 Cr" && (numericPrice < 10000000 || numericPrice > 30000000)) return false;
-        if (priceFilter === "₹3 Cr - ₹5 Cr" && (numericPrice < 30000000 || numericPrice > 50000000)) return false;
-        if (priceFilter === "Over ₹5 Cr" && numericPrice <= 50000000) return false;
+      if (minPrice && !isNaN(Number(minPrice))) {
+        if (numericPrice < Number(minPrice)) return false;
+      }
+      if (maxPrice && !isNaN(Number(maxPrice))) {
+        if (numericPrice > Number(maxPrice)) return false;
       }
       
       return true;
     });
-  }, [locationFilter, sizeFilter, typeFilter, priceFilter]);
+  }, [locationFilter, sizeFilter, typeFilter, minPrice, maxPrice]);
 
   return (
     <div className="card">
@@ -126,16 +125,24 @@ export default function Home() {
               </th>
               <th>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  <span>Price</span>
-                  <select 
-                    value={priceFilter} 
-                    onChange={(e) => setPriceFilter(e.target.value)}
-                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "120px" }}
-                  >
-                    {priceOptions.map(p => (
-                      <option key={p} value={p}>{p}</option>
-                    ))}
-                  </select>
+                  <span>Price (₹)</span>
+                  <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
+                    <input 
+                      type="number" 
+                      placeholder="Min" 
+                      value={minPrice} 
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "70px" }}
+                    />
+                    <span style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>to</span>
+                    <input 
+                      type="number" 
+                      placeholder="Max" 
+                      value={maxPrice} 
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "70px" }}
+                    />
+                  </div>
                 </div>
               </th>
               <th>
