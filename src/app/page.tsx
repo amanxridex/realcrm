@@ -5,7 +5,6 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { PROPERTIES } from "@/data/properties";
 
 export default function Home() {
-export default function Home() {
   const [propertiesList, setPropertiesList] = useState(PROPERTIES);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
