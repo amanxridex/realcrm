@@ -32,6 +32,7 @@ export default function Home() {
   const [maxPrice, setMaxPrice] = useState("");
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [propertyToDelete, setPropertyToDelete] = useState<number | null>(null);
   const [newPropertyForm, setNewPropertyForm] = useState({
     title: "",
     location: "",
@@ -144,11 +145,18 @@ export default function Home() {
     });
   };
 
+  const confirmDelete = () => {
+    if (propertyToDelete !== null) {
+      setPropertiesList(propertiesList.filter(p => p.id !== propertyToDelete));
+      setPropertyToDelete(null);
+    }
+  };
+
   return (
     <div className="card" style={{ position: "relative" }}>
       <div className="card-header" style={{ flexDirection: "column", alignItems: "flex-start", gap: "1rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center" }}>
-          <h2 style={{ fontSize: "1.1rem", fontWeight: 600 }}>All Properties</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+          <h2 style={{ fontSize: "1.2rem", fontWeight: 700, letterSpacing: "-0.025em" }}>All Properties</h2>
           <button className="btn-primary" onClick={() => setShowAddModal(true)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Add Property
@@ -162,7 +170,7 @@ export default function Home() {
             <tr>
               <th>Property Details</th>
               <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <span>Location</span>
                   <select 
                     value={locationFilter} 
@@ -176,7 +184,7 @@ export default function Home() {
                 </div>
               </th>
               <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <span>Type</span>
                   <select 
                     value={typeFilter} 
@@ -190,7 +198,7 @@ export default function Home() {
                 </div>
               </th>
               <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <span>Price (₹)</span>
                   <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
                     <input 
@@ -212,7 +220,7 @@ export default function Home() {
                 </div>
               </th>
               <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   <span>Size</span>
                   <select 
                     value={sizeFilter} 
@@ -233,29 +241,29 @@ export default function Home() {
             {filteredProperties.length > 0 ? (
               filteredProperties.map((property) => (
                 <tr key={property.id}>
-                  <td style={{ fontWeight: 500, color: "var(--foreground)" }}>
+                  <td data-label="Property" style={{ fontWeight: 600, color: "var(--foreground)" }}>
                     {property.title}
                   </td>
-                  <td style={{ color: "var(--text-muted)" }}>{property.location}</td>
-                  <td>{property.type}</td>
-                  <td style={{ fontWeight: 600 }}>{property.price}</td>
-                  <td style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                  <td data-label="Location" style={{ color: "var(--text-muted)" }}>{property.location}</td>
+                  <td data-label="Type">{property.type}</td>
+                  <td data-label="Price" style={{ fontWeight: 700, color: "var(--primary-color)" }}>{property.price}</td>
+                  <td data-label="Size" style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
                     {property.beds}bd • {property.baths}ba • {property.sqft} sqft
                   </td>
-                  <td>
+                  <td data-label="Status">
                     <span className={`status-badge ${property.status.toLowerCase() === 'sold' ? 'sold' : ''}`}>
                       {property.status}
                     </span>
                   </td>
-                  <td>
-                    <div style={{ display: "flex", gap: "8px" }}>
+                  <td data-label="Actions">
+                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
                       <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                       </Link>
                       <button className="btn-icon" title="Edit">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                       </button>
-                      <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", background: "none", border: "none", cursor: "pointer" }} onClick={() => setPropertiesList(propertiesList.filter(p => p.id !== property.id))}>
+                      <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", background: "none", border: "none", cursor: "pointer" }} onClick={() => setPropertyToDelete(property.id)}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                       </button>
                     </div>
@@ -342,6 +350,28 @@ export default function Home() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {propertyToDelete !== null && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
+          <div className="card" style={{ width: "100%", maxWidth: "400px", padding: "2rem", textAlign: "center" }}>
+            <div style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", width: "64px", height: "64px", borderRadius: "50%", backgroundColor: "var(--danger-bg)", color: "var(--danger)", marginBottom: "1rem" }}>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 700, marginBottom: "0.5rem" }}>Delete Property?</h2>
+            <p style={{ color: "var(--text-muted)", fontSize: "0.95rem", marginBottom: "2rem" }}>
+              Are you sure you want to delete this property? This action cannot be undone.
+            </p>
+            <div style={{ display: "flex", gap: "1rem", justifyContent: "center" }}>
+              <button onClick={() => setPropertyToDelete(null)} style={{ padding: "0.6rem 1.25rem", border: "1px solid var(--border)", background: "transparent", color: "var(--foreground)", borderRadius: "var(--radius-pill)", cursor: "pointer", fontWeight: 600, flex: 1 }}>
+                Cancel
+              </button>
+              <button onClick={confirmDelete} style={{ padding: "0.6rem 1.25rem", border: "none", background: "var(--danger)", color: "white", borderRadius: "var(--radius-pill)", cursor: "pointer", fontWeight: 600, flex: 1 }}>
+                Yes, Delete
+              </button>
+            </div>
           </div>
         </div>
       )}
