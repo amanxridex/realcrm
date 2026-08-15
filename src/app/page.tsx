@@ -226,145 +226,97 @@ export default function Home() {
   };
 
   return (
-    <div className="card" style={{ position: "relative" }}>
-      <div className="card-header" style={{ flexDirection: "column", alignItems: "flex-start", gap: "1rem" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-          <h2 style={{ fontSize: "1.2rem", fontWeight: 700, letterSpacing: "-0.025em" }}>All Properties</h2>
-          <div style={{ display: "flex", gap: "0.75rem" }}>
-            <input 
-              type="file" 
-              accept=".csv" 
-              style={{ display: "none" }} 
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-            />
-            <button className="btn-primary" style={{ background: "rgba(255, 255, 255, 0.1)", border: "1px solid var(--border)", boxShadow: "none" }} onClick={() => fileInputRef.current?.click()}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-              Upload CSV
-            </button>
-            <button className="btn-primary" onClick={() => setShowAddModal(true)}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              Add Property
-            </button>
-          </div>
+    <>
+      {/* Top Navigation Tabs */}
+      <div className="top-tabs">
+        <button className="tab-item active">Buy</button>
+        <button className="tab-item">Sell</button>
+        <button className="tab-item">Rent</button>
+        <button className="tab-item">Compare</button>
+      </div>
+
+      <div className="page-header">
+        <div style={{ display: 'flex', alignItems: 'baseline' }}>
+          <span className="results-count">{filteredProperties.length} Results</span>
+          <span className="results-location">in {locationFilter}</span>
+        </div>
+        <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <input 
+            type="file" 
+            accept=".csv" 
+            style={{ display: "none" }} 
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+          />
+          <button className="btn-primary" style={{ background: "var(--surface)", color: "var(--text-dark)", border: "1px solid var(--border)", boxShadow: "none" }} onClick={() => fileInputRef.current?.click()}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Upload CSV
+          </button>
+          <button className="btn-primary" onClick={() => setShowAddModal(true)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add Property
+          </button>
         </div>
       </div>
-      
-      <div className="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Property Details</th>
-              <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <span>Location</span>
-                  <select 
-                    value={locationFilter} 
-                    onChange={(e) => setLocationFilter(e.target.value)}
-                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "150px" }}
-                  >
-                    {locations.map(loc => (
-                      <option key={loc} value={loc}>{loc}</option>
-                    ))}
-                  </select>
+
+      <div className="filter-bar">
+        <div className="filter-pill">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" placeholder="Search Here...." style={{ width: '120px' }} />
+        </div>
+        
+        <div className="filter-pill">
+          <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>Price</span>
+          <span style={{ color: "var(--primary-color)", fontWeight: "700" }}>$$</span>
+        </div>
+
+        <div className="filter-pill active">
+          <select value={sizeFilter} onChange={(e) => setSizeFilter(e.target.value)} style={{ color: "inherit", fontWeight: "600" }}>
+            {sizeOptions.map(opt => <option key={opt} value={opt} style={{color: '#000'}}>{opt}</option>)}
+          </select>
+        </div>
+
+        <div className="filter-pill">
+          <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+            {types.map(t => <option key={t} value={t} style={{color: '#000'}}>{t}</option>)}
+          </select>
+        </div>
+        
+        <div className="filter-pill">
+          <select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)}>
+            {locations.map(loc => <option key={loc} value={loc} style={{color: '#000'}}>{loc}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div className="property-grid">
+        {filteredProperties.length > 0 ? (
+          filteredProperties.map((property) => (
+            <div className="property-card" key={property.id}>
+              <img src={property.image} alt={property.title} className="property-image" />
+              <div className="property-content">
+                <div className="property-title">{property.title}</div>
+                <div className="property-price">{property.price}</div>
+                <div className="property-location">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  {property.location}
                 </div>
-              </th>
-              <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <span>Type</span>
-                  <select 
-                    value={typeFilter} 
-                    onChange={(e) => setTypeFilter(e.target.value)}
-                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "120px" }}
-                  >
-                    {types.map(t => (
-                      <option key={t} value={t}>{t}</option>
-                    ))}
-                  </select>
+                <div style={{ display: 'flex', gap: '8px', marginTop: '1rem', justifyContent: 'flex-end' }}>
+                  <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", border: "none", background: "none" }} onClick={() => setPropertyToDelete(property.id)}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                  </button>
+                  <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </Link>
                 </div>
-              </th>
-              <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <span>Price (₹)</span>
-                  <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                    <input 
-                      type="number" 
-                      placeholder="Min" 
-                      value={minPrice} 
-                      onChange={(e) => setMinPrice(e.target.value)}
-                      style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "70px" }}
-                    />
-                    <span style={{ fontSize: "0.7rem", color: "var(--text-muted)" }}>to</span>
-                    <input 
-                      type="number" 
-                      placeholder="Max" 
-                      value={maxPrice} 
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                      style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "70px" }}
-                    />
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                  <span>Size</span>
-                  <select 
-                    value={sizeFilter} 
-                    onChange={(e) => setSizeFilter(e.target.value)}
-                    style={{ padding: "4px", borderRadius: "4px", border: "1px solid var(--border)", outline: "none", fontSize: "0.8rem", width: "100%", maxWidth: "150px" }}
-                  >
-                    {sizeOptions.map(opt => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-                </div>
-              </th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProperties.length > 0 ? (
-              filteredProperties.map((property) => (
-                <tr key={property.id}>
-                  <td data-label="Property" style={{ fontWeight: 600, color: "var(--foreground)" }}>
-                    {property.title}
-                  </td>
-                  <td data-label="Location" style={{ color: "var(--text-muted)" }}>{property.location}</td>
-                  <td data-label="Type">{property.type}</td>
-                  <td data-label="Price" style={{ fontWeight: 700, color: "var(--primary-color)" }}>{property.price}</td>
-                  <td data-label="Size" style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
-                    {property.beds}bd • {property.baths}ba • {property.sqft} sqft
-                  </td>
-                  <td data-label="Status">
-                    <span className={`status-badge ${property.status.toLowerCase() === 'sold' ? 'sold' : ''}`}>
-                      {property.status}
-                    </span>
-                  </td>
-                  <td data-label="Actions">
-                    <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
-                      <Link href={`/properties/${property.id}`} className="btn-icon" title="View">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                      </Link>
-                      <button className="btn-icon" title="Edit">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                      </button>
-                      <button className="btn-icon" title="Delete" style={{ color: "var(--danger)", background: "none", border: "none", cursor: "pointer" }} onClick={() => setPropertyToDelete(property.id)}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} style={{ textAlign: "center", padding: "3rem", color: "var(--text-muted)" }}>
-                  No properties found matching your filters.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+            No properties found matching your filters.
+          </div>
+        )}
       </div>
 
       {showAddModal && (
@@ -462,6 +414,6 @@ export default function Home() {
         </div>
       )}
 
-    </div>
+    </>
   );
 }
